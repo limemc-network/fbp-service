@@ -66,7 +66,7 @@ class FastSessionImpl implements FastSession {
     }
 
     @Override
-    public void set() {
+    public void apply() {
         if (startTimeMillis == null) {
             startTimeMillis = System.currentTimeMillis();
         }

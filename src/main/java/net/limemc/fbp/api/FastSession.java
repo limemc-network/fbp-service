@@ -22,7 +22,7 @@ public interface FastSession {
 
     void setRemoveTileEntity(boolean removeTileEntity);
 
-    void set();
+    void apply();
 
     long flush();
 }
