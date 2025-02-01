@@ -25,6 +25,8 @@ class FastSessionImpl implements FastSession {
     @Setter
     private boolean removeTileEntity;
 
+    private Runnable runnable;
+
     private Location location;
     private Territory territory;
 
@@ -78,6 +80,9 @@ class FastSessionImpl implements FastSession {
         if (async) {
             WorkloadRunnable workloadRunnable = new WorkloadRunnable();
 
+            if (runnable != null)
+                workloadRunnable.whenComplete(runnable);
+
             if (location != null) {
                 Workload workload = new BlockSetWorkload(location, blockData, applyPhysics, removeTileEntity);
                 workloadRunnable.addWorkload(workload);
@@ -88,15 +93,24 @@ class FastSessionImpl implements FastSession {
                 }
             }
 
+            return;
+        }
+
+        if (location != null) {
+            BlockChanger.setBlock(location, blockData, applyPhysics, removeTileEntity);
         } else {
-            if (location != null) {
-                BlockChanger.setBlock(location, blockData, applyPhysics, removeTileEntity);
-            } else {
-                for (Block block : territory.getTerritoryBlocks()) {
-                    BlockChanger.setBlock(block.getLocation(), blockData, applyPhysics, removeTileEntity);
-                }
+            for (Block block : territory.getTerritoryBlocks()) {
+                BlockChanger.setBlock(block.getLocation(), blockData, applyPhysics, removeTileEntity);
             }
         }
+
+        if (runnable != null)
+            runnable.run();
+    }
+
+    @Override
+    public void thenRun(@NonNull Runnable runnable) {
+        this.runnable = runnable;
     }
 
     @Override

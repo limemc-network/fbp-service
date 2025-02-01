@@ -24,5 +24,7 @@ public interface FastSession {
 
     void apply();
 
+    void thenRun(@NonNull Runnable runnable);
+
     long flush();
 }

@@ -40,9 +40,11 @@ import net.limemc.fbp.api.FastSessionBuilder;
 FastSession session = FastSessionBuilder
         .builder(territory) // принимает также локацию
         .async(true)
+        .thenRun(() -> Bukkit.broadcast("эщкере"))
         .removeTileEntity(true)
         .build();
 
 session.apply(); // отправить изменения
+
 long ms = session.flush(); // очистить ресурсы и получить потраченное время
 ```

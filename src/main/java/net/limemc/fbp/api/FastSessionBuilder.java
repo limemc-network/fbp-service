@@ -39,6 +39,11 @@ public class FastSessionBuilder {
         return this;
     }
 
+    public FastSessionBuilder thenRun(@NonNull Runnable runnable) {
+        session.thenRun(runnable);
+        return this;
+    }
+
     public FastSession build() {
         return session;
     }
